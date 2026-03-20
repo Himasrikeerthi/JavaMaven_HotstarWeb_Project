@@ -1,23 +1,15 @@
 pipeline {
     agent any
 
-    environment {
-        IMAGE_NAME = "sriramyaganni/hotstar-webapp"
-        CONTAINER_NAME = "hotstar-container"
-    }
-
     stages {
 
         stage('Checkout Code') {
             steps {
-                git branch: 'master',
-                credentialsId: 'Sriramya',
-                url: 'https://github.com/SriramyaGanni/JavaMaven_HotstarWeb_Project.git'
-
+                git 'https://github.com/SriramyaGanni/JavaMaven_HotstarWeb_Project.git'
             }
         }
 
-        stage('Build Maven Artifact') {
+        stage('Build Maven') {
             steps {
                 sh 'mvn clean package'
             }
@@ -25,35 +17,23 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $IMAGE_NAME:${BUILD_NUMBER} .'
-                sh 'docker tag $IMAGE_NAME:${BUILD_NUMBER} $IMAGE_NAME:latest'
+                sh 'docker build -t sriramyaganni/hotstar-webapp:latest .'
             }
         }
 
-        stage('DockerHub Login') {
+        stage('Docker Login & Push') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
                     sh 'echo $PASS | docker login -u $USER --password-stdin'
+                    sh 'docker push sriramyaganni/hotstar-webapp:latest'
                 }
             }
         }
 
-        stage('Push Image to DockerHub') {
+        stage('Deploy to Kubernetes') {
             steps {
-                sh 'docker push $IMAGE_NAME:${BUILD_NUMBER}'
-                sh 'docker push $IMAGE_NAME:latest'
-            }
-        }
-
-        stage('Run Container') {
-            steps {
-                sh '''
-                docker rm -f $CONTAINER_NAME || true
-                docker run -d -p 8083:8080 --name $CONTAINER_NAME $IMAGE_NAME:latest
-                '''
+                sh 'kubectl apply -f hotstar-deployment.yml'
             }
         }
     }
 }
-
-
