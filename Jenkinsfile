@@ -5,7 +5,9 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
-                git 'https://github.com/SriramyaGanni/JavaMaven_HotstarWeb_Project.git'
+                git branch: 'master',
+                    credentialsId: 'git-creds',
+                    url: 'https://github.com/SriramyaGanni/JavaMaven_HotstarWeb_Project.git'
             }
         }
 
@@ -32,7 +34,7 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                sh 'kubectl apply -f hotstar-deployment.yml'
+                sh 'kubectl apply -f hotstar_deployment.yml'
             }
         }
     }
