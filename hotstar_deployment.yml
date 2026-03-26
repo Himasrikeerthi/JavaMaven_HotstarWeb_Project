@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: hotstar-container
-          image: sriramyaganni/hotstar-webapp:latest
+          image: himasrikeerthi/hotstar-app:latest
           ports:
             - containerPort: 8080
 ---
