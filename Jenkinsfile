@@ -4,8 +4,8 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
-                git branch: 'main',
-                    credentialsId: 'git-creds',
+                git branch: 'master',
+                    credentialsId: 'github-creds',
                     url: 'https://github.com/Himasrikeerthi/JavaMaven_HotstarWeb_Project.git'
                 }
         }
@@ -24,7 +24,7 @@ pipeline {
 
         stage('Docker Login & Push') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                withCredentials([usernamePassword(credentialsId: 'docker-creds', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
                     sh 'echo $PASS | docker login -u $USER --password-stdin'
                     sh 'docker push himasrikeerthi/hotstar-app:latest'
                 }
