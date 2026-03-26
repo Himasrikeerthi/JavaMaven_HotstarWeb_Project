@@ -30,11 +30,14 @@ pipeline {
                 }
             }
         }
-
-        stage('Deploy to Kubernetes') {
-            steps {
-                sh 'kubectl apply -f hotstar_deployment.yml'
-            }
+        stage('Deploy to EKS') {
+    steps {
+        sh '''
+        export AWS_DEFAULT_REGION=ap-south-1
+        aws eks update-kubeconfig --name mycluster --region ap-south-1
+        kubectl get nodes
+        kubectl apply -f hotstar_deployment.yml
+        '''}
         }
     }
 }
