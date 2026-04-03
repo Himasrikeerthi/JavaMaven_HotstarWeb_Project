@@ -63,7 +63,7 @@
                 <artifactId>sonar-maven-plugin</artifactId>
                 <version>3.11.1.2311</version>
                 <configuration>
-                    <sonarHostUrl>http://52.66.224.134:9000</sonarHostUrl>
+                    <sonarHostUrl>http://44.220.160.7:9000</sonarHostUrl>
                     <sonarLogin>f8b002b46d429b013ea0bf60f1e0febd07392f77</sonarLogin>
                 </configuration>
             </plugin>
