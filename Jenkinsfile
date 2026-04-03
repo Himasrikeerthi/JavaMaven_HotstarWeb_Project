@@ -30,9 +30,16 @@ pipeline {
                 }
             }
         }
-        stage('Deploy to k8s') {
-    steps {
-        sh 'kubectl apply -f hotstar_deployment.yml'}
+                stage('Deploy to Kubernetes') {
+            steps {
+                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+                    sh '''
+                    export KUBECONFIG=$KUBECONFIG
+                    kubectl get nodes
+                    kubectl apply -f hotstar_deployment.yml
+                    '''
+                }
+            }
         }
-    }
-}
+            
+              
