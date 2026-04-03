@@ -11,9 +11,38 @@ pipeline {
             }
         }
 
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('sq') {
+                    sh 'mvn sonar:sonar'
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 2, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+
         stage('Build Maven') {
             steps {
                 sh 'mvn clean package'
+            }
+        }
+
+        stage('Artifact in Nexus') {
+            steps {
+                withMaven(
+                    globalMavenSettingsConfig: 'settings.xml',
+                    jdk: 'jdk17',
+                    maven: 'maven',
+                    traceability: true
+                ) {
+                    sh 'mvn deploy'
+                }
             }
         }
 
@@ -31,6 +60,7 @@ pipeline {
                     passwordVariable: 'PASS'
                 )]) {
                     sh '''
+                    set -e
                     echo $PASS | docker login -u $USER --password-stdin
                     docker push himasrikeerthi/hotstar-app:latest
                     '''
@@ -42,15 +72,21 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                     sh '''
+                    set -e
                     export KUBECONFIG=$KUBECONFIG
+
+                    echo "Checking cluster..."
                     kubectl get nodes
+
+                    echo "Deploying app..."
                     kubectl apply -f hotstar_deployment.yml
+
+                    echo "Pods status..."
+                    kubectl get pods
                     '''
                 }
             }
         }
-
     }
-}
-            
-              
+
+    
