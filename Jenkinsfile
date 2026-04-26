@@ -41,13 +41,7 @@ pipeline {
                     maven: 'maven3',
                     traceability: true
                 ) {
-                    withCredentials([usernamePassword(
-                        credentialsId: 'nexus-creds',
-                        usernameVariable: 'NEXUS_USER',
-                        passwordVariable: 'NEXUS_PASS'
-                    )]) {
-                        sh 'mvn clean deploy'
-                    }
+                    sh 'mvn clean deploy'
                 }
             }
         }
@@ -95,4 +89,3 @@ pipeline {
         }
     }
 }
-
