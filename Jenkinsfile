@@ -37,8 +37,8 @@ pipeline {
             steps {
                 withMaven(
                     globalMavenSettingsConfig: 'settings.xml',
-                    jdk: 'jdk17',
-                    maven: 'maven',
+                    jdk: 'jdk21',
+                    maven: 'maven3',
                     traceability: true
                 ) {
                     sh 'mvn deploy'
