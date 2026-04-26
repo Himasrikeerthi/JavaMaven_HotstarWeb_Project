@@ -36,7 +36,7 @@ pipeline {
         stage('Artifact in Nexus') {
             steps {
                 withMaven(
-                    globalMavenSettingsConfig: 'maven-settings',
+                    globalMavenSettingsConfig: 'settings.xml',
                     jdk: 'jdk21',
                     maven: 'maven3',
                     traceability: true
