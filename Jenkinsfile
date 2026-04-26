@@ -36,12 +36,12 @@ pipeline {
         stage('Artifact in Nexus') {
             steps {
                 withMaven(
-                    globalMavenSettingsConfig: 'settings.xml',
+                    globalMavenSettingsConfig: 'maven-settings',
                     jdk: 'jdk21',
                     maven: 'maven3',
                     traceability: true
                 ) {
-                    sh 'mvn deploy'
+                    sh 'mvn clean deploy'
                 }
             }
         }
