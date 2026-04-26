@@ -33,6 +33,8 @@
     </dependencies>
 </distributionManagement>
          
+</distributionManagement>
+         
     <repository>
         <id>maven-releases</id>
         <name>Nexus Releases</name>
