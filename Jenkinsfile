@@ -40,7 +40,7 @@ tools{
                     maven: 'maven3',
                     traceability: true
                 ) {
-                    sh 'mvn clean deploy'
+                    sh 'mvn clean deploy -s /var/lib/jenkins/.m2/settings.xml'
                 }
             }
         }
