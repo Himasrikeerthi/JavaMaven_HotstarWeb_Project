@@ -32,19 +32,22 @@ tools{
             }
         }
         
-        stage('Artifact in Nexus') {
+  stage('Deploy') {
             steps {
-                withMaven(
-                    globalMavenSettingsConfig: 'settings.xml',
-                    jdk: 'jdk21',
-                    maven: 'maven3',
-                    traceability: true
-                ) {
-                    sh 'mvn clean deploy -s /var/lib/jenkins/.m2/settings.xml'
+                withCredentials([usernamePassword(
+                    credentialsId: 'nexus-creds',
+                    usernameVariable: 'NEXUS_USER',
+                    passwordVariable: 'NEXUS_PASS'
+                )]) {
+
+                    sh '''
+                    mvn clean deploy \
+                    -Dusername=$NEXUS_USER \
+                    -Dpassword=$NEXUS_PASS
+                    '''
                 }
             }
         }
-
         stage('Build Docker Image') {
             steps {
                 sh 'docker build -t himasrikeerthi/hotstar-app:latest .'
