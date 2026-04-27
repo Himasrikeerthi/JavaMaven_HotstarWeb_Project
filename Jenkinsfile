@@ -57,7 +57,7 @@ tools{
         stage('Docker Login & Push') {
             steps {
                 withCredentials([usernamePassword(
-                    credentialsId: 'Hima_Docker_Hub',
+                    credentialsId: 'docker_creds',
                     usernameVariable: 'USER',
                     passwordVariable: 'PASS'
                 )]) {
