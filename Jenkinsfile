@@ -57,7 +57,7 @@ tools{
         stage('Docker Login & Push') {
             steps {
                 withCredentials([usernamePassword(
-                    credentialsId: 'docker_creds',
+                    credentialsId: 'docker_crdeds',
                     usernameVariable: 'USER',
                     passwordVariable: 'PASS'
                 )]) {
